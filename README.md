@@ -3,6 +3,9 @@
 ### GET /api/players
 - Gets all players in the database
 
+### POST /api/players
+- Used to add a new player to the database
+
 ### GET /api/players/{playerId}
 - Gets a single player from their alphanumeric player ID
 
