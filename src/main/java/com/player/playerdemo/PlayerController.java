@@ -12,8 +12,11 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class PlayerController {
@@ -56,6 +59,21 @@ public class PlayerController {
         Player player = repository.findByPlayerId(playerId).orElseThrow(() -> new PlayerNotFoundException(playerId));
 
         return assembler.toModel(player);
+    }
+
+    /**
+     * Adds a single player to the database. Throws a {@link DuplicatePlayerException} if the player already exists.
+     * @param player The player to add.
+     * @return An Entity Model containing the Player.
+     */
+    @PostMapping("/api/players")
+    ResponseEntity<EntityModel<Player>> newPlayer(@RequestBody Player player) {
+        if (repository.existsByPlayerId(player.getPlayerId())) {
+            return ResponseEntity.status(HttpStatus.FOUND).body(assembler.toModel(player));
+        }
+
+        Player newPlayer = repository.save(player);
+        return ResponseEntity.created(linkTo(methodOn(PlayerController.class).one(newPlayer.getPlayerId())).toUri()).body(assembler.toModel(newPlayer));
     }
 
     /**

@@ -10,7 +10,7 @@ public class PlayerNotFoundException extends RuntimeException{
      * @param id the player's unique ID.
      */
     public PlayerNotFoundException(Long id) {
-        super("Could not find employee " + id);
+        super("Could not find player " + id);
     }
 
     /**
@@ -18,6 +18,6 @@ public class PlayerNotFoundException extends RuntimeException{
      * @param id the player's player ID.
      */
     public PlayerNotFoundException(String id) {
-        super("Could not find employee " + id);
+        super("Could not find player " + id);
     }
 }
